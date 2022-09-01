@@ -2,7 +2,7 @@
 import keyboard
 from rich.console import Console
 from rich.table import Table
-from imgtotext_lib import convert_image
+from imgtotext_lib import convert_image, convert_dir
 from rich import traceback
 from time import sleep
 import os # , sys
@@ -29,8 +29,9 @@ def print_dir():
     console.print(directory)
 
 print_dir()
+
 while True:
-    sleep(.05)
+    sleep(.07)
     if keyboard.read_key() in ['w','up']:
         choice -= 1
         if choice < 0:
@@ -45,8 +46,13 @@ while True:
     elif keyboard.is_pressed('esc'):
         break
     elif keyboard.is_pressed('enter'):
-        console.print('Reading File', style='bold cyan')
-        console.print(convert_image(os.listdir()[choice], './abc.txt', 'osd+equ+por'))
+        if ('.png' in os.listdir()[choice] or 
+             '.jpg' in os.listdir()[choice] or
+             '.jpeg' in os.listdir()[choice]):
+            console.print(f'Reading File {os.listdir()[choice]}', style='bold cyan')
+            convert_image(os.listdir()[choice], './abc.txt', 'osd+equ+por')
+        else:
+            convert_dir(os.listdir()[choice], './abc', 'osd+equ+por')
         break
 
 
